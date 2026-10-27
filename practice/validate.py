@@ -4,7 +4,7 @@ def is_valid_title(title: str) -> bool:
         return False
     if len(trimmed) > 100:
         return False
-    return True
+    return len(trimmed) <= 100
 
 
 print(is_valid_title("牛乳を買う"))
