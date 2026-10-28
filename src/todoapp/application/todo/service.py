@@ -1,6 +1,6 @@
-from todoapp.domain.types import Todo
-from todoapp.domain.validate import validate_title
-from todoapp.infrastructure.repository import (
+from todoapp.domain.todo.types import Todo
+from todoapp.domain.todo.validate import validate_title
+from todoapp.infrastructure.todo.repository import (
     delete_todo_by_id,
     find_all_todos,
     find_todo_by_id,

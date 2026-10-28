@@ -41,38 +41,26 @@ uv run fastapi dev src/todoapp/presentation/server.py
 ## テスト
 
 ```bash
-uv run pytest
+uv run pytest src/
 ```
-
-テストは使い捨ての DB を使うので、`todo.db` のデータは変わりません。
 
 ## 整形・静的チェック・型チェック
 
 ```bash
-uv run ruff check src/ tests/
-uv run ruff format --check src/ tests/
+uv run ruff check src/
+uv run ruff format --check src/
 uv run mypy src/
 ```
 
-## ディレクトリ構成
+## 主なファイル
 
-TypeScript 版の第10章と同じく、役割ごとに4つの層に分けています。
-
-```text
-src/todoapp/
-├── domain/
-│   ├── types.py          # Todo の型
-│   └── validate.py       # タイトルのルール
-├── application/
-│   └── service.py        # 一覧・追加・完了切替・削除の流れ
-├── infrastructure/
-│   └── repository.py     # SQLite 接続、SQL、0/1 と bool の変換
-└── presentation/
-    └── server.py         # FastAPI のルーティング、400/404
-tests/
-├── conftest.py           # テスト用の DB に切り替える
-├── test_api.py           # API の結合テスト
-└── test_validate.py      # バリデーションの単体テスト
-practice/                 # 付録に取り組む途中の練習ファイル
-public/index.html         # フロント(TypeScript 版と同じ)
-```
+| ファイル | 役割 |
+|---|---|
+| `src/todoapp/domain/todo/types.py` | TODO の共通型 |
+| `src/todoapp/domain/todo/validate.py` | タイトルのバリデーション |
+| `src/todoapp/application/todo/service.py` | TODO の一覧・追加・完了切替・削除の流れ |
+| `src/todoapp/infrastructure/todo/repository.py` | SQLite 接続、SQL、0/1 と bool の変換 |
+| `src/todoapp/presentation/server.py` | FastAPI の HTTP 受け口 |
+| `src/todoapp/test_api.py` | API の結合テスト |
+| `practice/` | 練習用ファイル |
+| `public/index.html` | フロント(TypeScript 版と同じ) |

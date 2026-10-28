@@ -1,12 +1,10 @@
-import os
 import sqlite3
 
-from todoapp.domain.types import Todo
+from todoapp.domain.todo.types import Todo
 
 
-def connect() -> sqlite3.Connection:
-    # テストでは環境変数 TODO_DB_PATH で別の DB ファイルに切り替える
-    db = sqlite3.connect(os.environ.get("TODO_DB_PATH", "todo.db"))
+def create_table() -> None:
+    db = sqlite3.connect("todo.db")
     db.execute("""
     CREATE TABLE IF NOT EXISTS todos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -14,7 +12,11 @@ def connect() -> sqlite3.Connection:
       done INTEGER NOT NULL DEFAULT 0
     )
     """)
-    return db
+    db.commit()
+    db.close()
+
+
+create_table()
 
 
 def todo_from_sqlite_row(row: tuple[int, str, int]) -> Todo:
@@ -22,7 +24,7 @@ def todo_from_sqlite_row(row: tuple[int, str, int]) -> Todo:
 
 
 def find_all_todos() -> list[Todo]:
-    db = connect()
+    db = sqlite3.connect("todo.db")
     rows = db.execute("SELECT * FROM todos ORDER BY id DESC").fetchall()
     db.close()
     todos: list[Todo] = []
@@ -32,7 +34,7 @@ def find_all_todos() -> list[Todo]:
 
 
 def find_todo_by_id(todo_id: int) -> Todo | None:
-    db = connect()
+    db = sqlite3.connect("todo.db")
     row = db.execute("SELECT * FROM todos WHERE id = ?", (todo_id,)).fetchone()
     db.close()
     if row is None:
@@ -41,7 +43,7 @@ def find_todo_by_id(todo_id: int) -> Todo | None:
 
 
 def insert_todo(title: str) -> Todo:
-    db = connect()
+    db = sqlite3.connect("todo.db")
     cursor = db.execute("INSERT INTO todos (title) VALUES (?)", (title,))
     db.commit()
     new_id = cursor.lastrowid
@@ -55,7 +57,7 @@ def update_todo_done(todo_id: int, done: bool) -> Todo | None:
         done_for_sqlite = 1
     else:
         done_for_sqlite = 0
-    db = connect()
+    db = sqlite3.connect("todo.db")
     cursor = db.execute(
         "UPDATE todos SET done = ? WHERE id = ?", (done_for_sqlite, todo_id)
     )
@@ -68,7 +70,7 @@ def update_todo_done(todo_id: int, done: bool) -> Todo | None:
 
 
 def delete_todo_by_id(todo_id: int) -> bool:
-    db = connect()
+    db = sqlite3.connect("todo.db")
     cursor = db.execute("DELETE FROM todos WHERE id = ?", (todo_id,))
     db.commit()
     deleted = cursor.rowcount > 0

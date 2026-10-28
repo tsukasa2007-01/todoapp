@@ -2,13 +2,13 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from todoapp.application.service import (
+from todoapp.application.todo.service import (
     create_todo,
     list_todos,
     remove_todo,
     toggle_todo_done,
 )
-from todoapp.domain.types import Todo
+from todoapp.domain.todo.types import Todo
 
 app = FastAPI()
 
