@@ -7,13 +7,6 @@ def is_valid_title(title: str) -> bool:
     return len(trimmed) <= 100
 
 
-print(is_valid_title("牛乳を買う"))
-print(is_valid_title(""))
-print(is_valid_title("   "))
-print(is_valid_title("あ" * 101))
-print(is_valid_title("あ" * 100))
-
-
 def validate_title(raw_title: str) -> str:
     trimmed = raw_title.strip()
     if len(trimmed) == 0:
